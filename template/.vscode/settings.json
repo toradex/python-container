@@ -1,0 +1,11 @@
+{
+    "toradexpython.targetDebugPort": "6502", // debug port
+    "toradexpython.targetDevice": "XXX.XXX.XXX.XXX", // ip/hostname of your target device
+    "toradexpython.containersTemplatePath": "../containers", // path to the folder where you keep the containers templates (better if you use a relative path)
+    "toradexpython.mainscript": "hello.py", // name of the python file that should be executed
+    "toradexpython.containerParms": "", // optional parameters you want to setup on the container (ex: open ports for networking, add shared folders etc.)
+    "toradexpython.containerParms_debug": "", // same as above but only for debug instances
+    "toradexpython.containerParms_release": "", // same as above but only for release instances
+    "toradexpython.containerTemplate_debug": "python2/python-runtime-dbg", // name of the dockerfile used to build debug container (should not contain application code)
+    "toradexpython.containerTemplate_release": "python2/python-runtime" // name of the dockerfile used to build release container (should contain application code)
+}

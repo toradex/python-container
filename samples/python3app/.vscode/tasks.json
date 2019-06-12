@@ -1,0 +1,114 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "builddebugcontainer",
+            "command": "docker build -t ${workspaceFolderBasename}-dbg:latest --build-arg APPNAME=${config:toradexpython.mainscript} --build-arg DBGPORT=${config:toradexpython.targetDebugPort} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_debug}/Dockerfile ${workspaceFolder}",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
+            "label": "versionlocalcontainer",
+            "command": "docker image inspect --format \"{{ .Id }}\" ${workspaceFolderBasename}-dbg > ./.shalocal",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "builddebugcontainer"
+            ]
+        },
+        {
+            "label": "versionremotecontainer",
+            "command": "bash -c 'ssh torizon@${config:toradexpython.targetDevice} \"docker image inspect --format \\\"{{ .Id }}\\\" ${workspaceFolderBasename}-dbg || echo \\\"no container\\\"\"' > ./.sharemote",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "versionlocalcontainer"
+            ]
+        },
+        {
+            "label": "deploydebugcontainer",
+            "linux": {
+                "command": "bash -c \"if [ \\\"$(cat ./.shalocal)\\\" != \\\"$(cat ./.sharemote)\\\" ]; then echo 'deploying container to the device...' && docker save ${workspaceFolderBasename}-dbg | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date' ; fi\""
+            },
+            "windows": {
+                "command": "bash -c \"if [ \\\"$(cat ./.shalocal)\\\" != \\\"$(cat ./.sharemote)\\\" ]; then echo 'deploying container to the device...' && docker.exe save ${workspaceFolderBasename}-dbg | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date' ; fi\""
+            },
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "versionremotecontainer"
+            ]
+        },
+        {
+            "label": "removetempfiles",
+            "command": "bash -c 'rm ./.shalocal && rm ./.sharemote",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "deploydebugcontainer"
+            ]
+        },
+        {
+            "label": "deploydebugapp",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice}  'mkdir -p /home/torizon/${workspaceFolderBasename}' && rsync -avz ./ torizon@${config:toradexpython.targetDevice}:/home/torizon/${workspaceFolderBasename}/\"",
+            "type": "shell",
+            "problemMatcher": [],
+            "dependsOn": [
+                "removetempfiles "
+            ]
+        },
+        {
+            "label": "restartdebugcontainer",
+            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename}-dbg -p ${config:toradexpython.targetDebugPort}:${config:toradexpython.targetDebugPort} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_debug} ${workspaceFolderBasename}-dbg'\"",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "deploydebugapp"
+            ]
+        },
+        {
+            "label": "waitforsystemready",
+            "command": "bash -c \"while ! nc -z ${config:toradexpython.targetDevice} ${config:toradexpython.targetDebugPort}; do sleep 1; done\"",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "restartdebugcontainer"
+            ]
+        },
+        {
+            "label": "buildreleasecontainer",
+            "command": "docker build -t ${workspaceFolderBasename}:latest --build-arg APPNAME=${config:toradexpython.mainscript} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_release}/Dockerfile ${workspaceFolder}",
+            "type": "shell",
+            "problemMatcher": [],
+        },
+        {
+            "label": "deployreleasecontainer",
+            "command": "bash -c \"shalocal=$(docker image inspect --format '{{ .Id }}' ${workspaceFolderBasename}) && sharemote=$(ssh torizon@${config:toradexpython.targetDevice} \"docker image inspect --format '{{ .Id }}' ${workspaceFolderBasename} || echo 'no container'\" ) && if [ $shalocal != $sharemote ]; then echo 'deploying container to the device...' && docker save ${workspaceFolderBasename} | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date'; fi\"",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "buildreleasecontainer"
+            ]
+        },
+        {
+            "label": "restartreleasecontainer",
+            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_release} ${workspaceFolderBasename}'\"",
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [],
+            "dependsOn": [
+                "deployreleasecontainer"
+            ]
+        },
+    ]
+}

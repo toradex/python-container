@@ -1,0 +1,11 @@
+{
+    "toradexpython.targetDebugPort": "6502",
+    "toradexpython.targetDevice": "192.168.1.128",
+    "toradexpython.containersTemplatePath": "../../containers",
+    "toradexpython.mainscript": "hello.py",
+    "toradexpython.containerParms": "",
+    "toradexpython.containerParms_debug": "",
+    "toradexpython.containerParms_release": "",
+    "toradexpython.containerTemplate_debug": "python3/python-runtime-dbg",
+    "toradexpython.containerTemplate_release": "python3/python-runtime"
+}
