@@ -1,2 +1,2 @@
-# python-container
-
+This repo provides instructions, configuration files and samples to let users run Python 2.X and Python 3.X applications on Torizon.
+Please check https://developer.toradex.com/knowledge-base/python-development-and-debugging-on-torizon-using-visual-studio-code on the Toradex developer website for detailed instructions.

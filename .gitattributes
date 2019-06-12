@@ -1,0 +1,5 @@
+# those files will be used inside a Linux container, so they must keep
+# unix-style eol to work correctly
+
+*.py text eol=lf
+*.sh text eol=lf
