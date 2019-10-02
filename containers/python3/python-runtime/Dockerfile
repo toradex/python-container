@@ -17,4 +17,4 @@ ENV ENVAPPNAME ${APPNAME}
 
 COPY . /app
 
-CMD python /app/$ENVAPPNAME
+CMD python3 /app/$ENVAPPNAME
