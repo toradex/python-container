@@ -92,7 +92,12 @@
         },
         {
             "label": "deployreleasecontainer",
-            "command": "bash -c \"shalocal=$(docker image inspect --format '{{ .Id }}' ${workspaceFolderBasename}) && sharemote=$(ssh torizon@${config:toradexpython.targetDevice} \"docker image inspect --format '{{ .Id }}' ${workspaceFolderBasename} || echo 'no container'\" ) && if [ $shalocal != $sharemote ]; then echo 'deploying container to the device...' && docker save ${workspaceFolderBasename} | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date'; fi\"",
+            "linux": {
+                "command": "bash -c \"if [ \\\"$(cat ./.shalocal)\\\" != \\\"$(cat ./.sharemote)\\\" ]; then echo 'deploying container to the device...' && docker save ${workspaceFolderBasename} | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date' ; fi\""
+            },
+            "windows": {
+                "command": "bash -c \"if [ \\\"$(cat ./.shalocal)\\\" != \\\"$(cat ./.sharemote)\\\" ]; then echo 'deploying container to the device...' && docker.exe save ${workspaceFolderBasename} | ssh torizon@${config:toradexpython.targetDevice} 'docker load' ; else echo 'remote container is up to date' ; fi\""
+            },
             "type": "shell",
             "args": [],
             "problemMatcher": [],
