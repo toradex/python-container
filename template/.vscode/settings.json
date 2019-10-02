@@ -7,5 +7,8 @@
     "toradexpython.containerParms_debug": "", // same as above but only for debug instances
     "toradexpython.containerParms_release": "", // same as above but only for release instances
     "toradexpython.containerTemplate_debug": "python2/python-runtime-dbg", // name of the dockerfile used to build debug container (should not contain application code)
-    "toradexpython.containerTemplate_release": "python2/python-runtime" // name of the dockerfile used to build release container (should contain application code)
+    "toradexpython.containerTemplate_release": "python2/python-runtime", // name of the dockerfile used to build release container (should contain application code)
+    "toradexpython.containerCmdLine": "", // command line passed to the container
+    "toradexpython.containerCmdLine_debug": "", // same as above but only for debug instances
+    "toradexpython.containerCmdLine_release": "", // same as above but only for debug instances
 }

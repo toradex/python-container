@@ -4,7 +4,7 @@ ARG APPNAME
 
 RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-pip python3-setuptools && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
 
 COPY setup.sh /setup.sh
 COPY cleanup.sh /cleanup.sh
