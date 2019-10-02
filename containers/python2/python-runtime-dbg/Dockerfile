@@ -18,4 +18,11 @@ RUN /setup.sh debug && pip install -r /requirements.txt && /cleanup.sh debug
 ENV ENVAPPNAME ${APPNAME}
 ENV ENVPORT ${DBGPORT}
 
-CMD python -m ptvsd --host 0.0.0.0 --port $ENVPORT --wait /app/$ENVAPPNAME
+RUN echo "#!/bin/sh" > /startptvsd && \
+    echo "echo \"running \$@\"" >> /startptvsd && \
+    echo "/usr/bin/python -m ptvsd --host 0.0.0.0 --port $ENVPORT --wait \"\$@\"" >> /startptvsd && \
+    chmod a+x /startptvsd
+
+
+ENTRYPOINT ["/startptvsd"]
+CMD ["/app/$ENVAPPNAME"]

@@ -18,4 +18,11 @@ RUN chmod a+x ./setup.sh && chmod a+x ./cleanup.sh && ./setup.sh debug && pip3 i
 ENV ENVAPPNAME ${APPNAME}
 ENV ENVPORT ${DBGPORT}
 
-CMD python3 -m ptvsd --host 0.0.0.0 --port $ENVPORT --wait /app/$ENVAPPNAME
+RUN echo "#!/bin/sh" > /startptvsd && \
+    echo "echo \"running \$@\"" >> /startptvsd && \
+    echo "/usr/bin/python3 -m ptvsd --host 0.0.0.0 --port $ENVPORT --wait \"\$@\"" >> /startptvsd && \
+    chmod a+x /startptvsd
+
+
+ENTRYPOINT ["/startptvsd"]
+CMD ["/app/$ENVAPPNAME"]

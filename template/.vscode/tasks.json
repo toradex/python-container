@@ -66,7 +66,7 @@
         },
         {
             "label": "restartdebugcontainer",
-            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename}-dbg -p ${config:toradexpython.targetDebugPort}:${config:toradexpython.targetDebugPort} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_debug} ${workspaceFolderBasename}-dbg'\"",
+            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename}-dbg -p ${config:toradexpython.targetDebugPort}:${config:toradexpython.targetDebugPort} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_debug} ${workspaceFolderBasename}-dbg /app/${config:toradexpython.mainscript} ${config:toradexpython.containerCmdLine} ${config:toradexpython.containerCmdLine_debug}'\"",
             "type": "shell",
             "args": [],
             "problemMatcher": [],
@@ -102,7 +102,7 @@
         },
         {
             "label": "restartreleasecontainer",
-            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_release} ${workspaceFolderBasename}'\"",
+            "command": "bash -c \"ssh torizon@${config:toradexpython.targetDevice} 'docker stop ${workspaceFolderBasename}-dbg ; docker stop ${workspaceFolderBasename} ; docker run -d --rm --name ${workspaceFolderBasename} -v /home/torizon/${workspaceFolderBasename}:/app ${config:toradexpython.containerParms} ${config:toradexpython.containerParms_release} ${workspaceFolderBasename} ${config:toradexpython.containerCmdLine} ${config:toradexpython.containerCmdLine_release}'\"",
             "type": "shell",
             "args": [],
             "problemMatcher": [],
