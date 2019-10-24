@@ -44,7 +44,7 @@
         },
         {
             "label": "removetempfiles",
-            "command": "bash -c 'rm ./.shalocal && rm ./.sharemote",
+            "command": "bash -c 'rm ./.shalocal || rm ./.sharemote || true",
             "type": "shell",
             "args": [],
             "problemMatcher": [],
