@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "builddebugcontainer",
-            "command": "docker build -t ${workspaceFolderBasename}-dbg:latest --build-arg APPNAME=${config:toradexpython.mainscript} --build-arg DBGPORT=${config:toradexpython.targetDebugPort} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_debug}/Dockerfile ${workspaceFolder}",
+            "command": "docker build -t ${workspaceFolderBasename}-dbg:latest --build-arg IMAGE_ARCH=${config:toradexpython.arch} --build-arg APPNAME=${config:toradexpython.mainscript} --build-arg DBGPORT=${config:toradexpython.targetDebugPort} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_debug}/Dockerfile ${workspaceFolder}",
             "type": "shell",
             "problemMatcher": [],
         },
@@ -44,7 +44,7 @@
         },
         {
             "label": "removetempfiles",
-            "command": "bash -c 'rm ./.shalocal || rm ./.sharemote || true",
+            "command": "bash -c 'rm ./.shalocal || rm ./.sharemote || true'",
             "type": "shell",
             "args": [],
             "problemMatcher": [],
@@ -86,7 +86,7 @@
         },
         {
             "label": "buildreleasecontainer",
-            "command": "docker build -t ${workspaceFolderBasename}:latest --build-arg APPNAME=${config:toradexpython.mainscript} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_release}/Dockerfile ${workspaceFolder}",
+            "command": "docker build -t ${workspaceFolderBasename}:latest --build-arg IMAGE_ARCH=${config:toradexpython.arch} --build-arg APPNAME=${config:toradexpython.mainscript} -f ${config:toradexpython.containersTemplatePath}/${config:toradexpython.containerTemplate_release}/Dockerfile ${workspaceFolder}",
             "type": "shell",
             "problemMatcher": [],
         },
